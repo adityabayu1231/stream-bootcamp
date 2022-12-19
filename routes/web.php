@@ -1,9 +1,18 @@
 <?php
-
+// admin
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\LoginController;
 use App\Http\Controllers\Admin\MovieController;
+use App\Http\Controllers\Admin\TransactionController;
+// member
+use App\Http\Controllers\Member\RegisterController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Member\LoginController as MemberLoginController;
+use App\Http\Controllers\Member\PricingController;
+use App\Http\Controllers\Member\DashboardController as MemberDashboardController;
+use App\Http\Controllers\Member\MovieController as MemberMovieController;
+use App\Http\Controllers\Member\TransactionController as MemberTransactionController;
+use App\Http\Controllers\Member\WebhookController;
 
 /*
 |--------------------------------------------------------------------------
@@ -16,16 +25,30 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+// Define Member Route Here
 Route::get('/', function () {
-    return view('welcome');
+    return view('index');
 });
+
+Route::get('/register', [RegisterController::class, 'index'])->name('member.register');
+Route::post('/register', [RegisterController::class, 'store'])->name('member.register.store');
+Route::get('/login', [MemberLoginController::class, 'index'])->name('member.login');
+Route::post('/login', [MemberLoginController::class, 'auth'])->name('member.login.auth');
+Route::get('/pricing', [PricingController::class, 'index'])->name('pricing');
+Route::post('/payment-notification', [WebhookController::class, 'handler'])->withoutMiddleware(\App\Http\Middleware\VerifyCsrfToken::class);
+
+// Define Admin Route Here
 Route::get('/admin/login', [LoginController::class, 'index'])->name('admin.login');
 Route::post('/admin/login', [LoginController::class, 'authenticate'])->name('admin.login.auth');
-// Route::group(array('prefix' => 'admin'), function () {
-//     Route::get('home', function () {
-//     });
-// });
-// Route::get('/admin/dashboard', [DashboardController::class, 'index']);
+
+Route::group(['prefix' => 'member', 'middleware' => 'auth'], function () {
+    Route::get('/', [MemberDashboardController::class, 'index'])->name('member.dashboard');
+    Route::get('movie/{id}', [MemberMovieController::class, 'show'])->name('member.movie.detail');
+    Route::get('movie/{id}/watch', [MemberMovieController::class, 'watch'])->name('member.movie.watch');
+    Route::post('transaction', [MemberTransactionController::class, 'store'])->name('member.transaction.store');
+    Route::view('/payment-finish', 'member.payment-finish');
+});
+
 Route::group(['prefix' => 'admin', 'middleware' => 'admin.auth'], function () {
     Route::get('/', [DashboardController::class, 'index'])->name('admin.dashboard');
     Route::get('/logout', [LoginController::class, 'logout'])->name('admin.login.logout');
@@ -38,4 +61,5 @@ Route::group(['prefix' => 'admin', 'middleware' => 'admin.auth'], function () {
         Route::delete('/delete/{id}', [MovieController::class, 'destroy'])->name('admin.movie.delete');
         Route::get('/edit/{id}', [MovieController::class, 'edit'])->name('admin.movie.edit');
     });
+    Route::get('/transaction', [TransactionController::class, 'index'])->name('admin.transaction');
 });

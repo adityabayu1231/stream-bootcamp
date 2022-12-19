@@ -2,13 +2,13 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Models\Transaction;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Package extends Model
 {
-    use HasFactory, SoftDeletes;
+    use HasFactory;
     protected $table = 'packages';
 
     protected $fillable = [
@@ -19,4 +19,9 @@ class Package extends Model
         'is_download',
         'is_4k',
     ];
+
+    public function transaction()
+    {
+        return $this->hasMany(Transaction::class);
+    }
 }
