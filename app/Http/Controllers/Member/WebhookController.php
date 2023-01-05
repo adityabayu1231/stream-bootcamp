@@ -27,7 +27,7 @@ class WebhookController extends Controller
             if ($fraudStatus == 'challange') {
                 $status = 'challange';
             } else if ($fraudStatus == 'accept') {
-                $status = 'accept';
+                $status = 'success';
             }
         } else if ($transactionStatus == 'settlement') {
             $status = 'success';
@@ -37,8 +37,8 @@ class WebhookController extends Controller
             $status = 'pending';
         }
 
-        $transaction = Transaction::where('transaction_code', $orderId)->first();
-        $package = Package::find($transaction->package_id);
+        $transaction = Transaction::with('package')->where('transaction_code', $orderId)->first();
+        // $package = Package::find($transaction->package_id);
 
         if ($status == 'success') {
             $userPremium = UserPremium::where('user_id', $transaction->user_id)->first();
@@ -46,8 +46,8 @@ class WebhookController extends Controller
             if ($userPremium) {
                 # renewal subscription
                 $endOfSubscription = $userPremium->end_of_subscription;
-                $date = Carbon::createFromDate('Y-m-d', $endOfSubscription);
-                $newEndOfSubsctiption = $date->addDays($package->max_days)->format('Y-m-d');
+                $date = Carbon::createFromFormat('Y-m-d', $endOfSubscription);
+                $newEndOfSubsctiption = $date->addDays($transaction->package->max_days)->format('Y-m-d');
 
                 $userPremium->update([
                     'packaged_id' => $transaction->package_id,
@@ -56,13 +56,13 @@ class WebhookController extends Controller
             } else {
                 // new subscriber
                 UserPremium::create([
-                    'package_id' => $package->id,
+                    'package_id' => $transaction->package->id,
                     'user_id' => $transaction->user_id,
-                    'end_of_subscription' => now()->addDays($package->max_days),
+                    'end_of_subscription' => now()->addDays($transaction->package->max_days),
                 ]);
             }
         }
-
+        $transaction->update(['status' => $status]);
         return response()->json(null);
     }
 }

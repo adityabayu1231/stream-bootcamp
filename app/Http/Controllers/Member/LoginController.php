@@ -28,4 +28,11 @@ class LoginController extends Controller
             'credentials' => 'Your credentials are wrong',
         ])->withInput();
     }
+    public function logout(Request $request)
+    {
+        Auth::logout();
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+        return redirect('/');
+    }
 }

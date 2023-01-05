@@ -58,7 +58,7 @@
                                     name="email"
                                     value="{{ old('email') }}"
                                     class="rounded-full py-3 pr-3 pl-6 text-stream-dark placeholder:text-stream-gray placeholder:font-normal font-medium outline outline-stream-gray outline-1 text-base focus:outline-indigo-600 input-stream"
-                                    placeholder="Your email address" />
+                                    placeholder="Your email address" autofocus/>
                                 @error('email')
                                     <div style="color: red">{{ $message }}</div>
                                 @enderror

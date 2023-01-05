@@ -18,10 +18,9 @@
             </a>
             <div class="bg-white rounded-2xl text-stream-dark font-medium flex flex-col gap-1 absolute z-[999] right-0 top-[80px] min-w-[180px] hidden overflow-hidden"
                 id="dropdown-stream">
-                <a href="#" class="transition-all hover:bg-sky-100 p-4">Watch</a>
+                <a href="{{ route('member.dashboard') }}" class="transition-all hover:bg-sky-100 p-4">Watch</a>
                 <a href="#!" class="transition-all hover:bg-sky-100 p-4">Settings</a>
-                <a href="#" class="transition-all hover:bg-sky-100 p-4">Sign Out</a>
-                {{-- <a href="{{ route('member.login.logout') }}" class="transition-all hover:bg-sky-100 p-4">Sign Out</a> --}}
+                <a href="{{ route('member.login.logout') }}" class="transition-all hover:bg-sky-100 p-4">Sign Out</a>
             </div>
         </div>
     </div>

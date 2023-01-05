@@ -66,12 +66,10 @@
                         d="M12 7H7.5C6.83696 7 6.20107 6.73661 5.73223 6.26777C5.26339 5.79893 5 5.16304 5 4.5C5 3.83696 5.26339 3.20107 5.73223 2.73223C6.20107 2.26339 6.83696 2 7.5 2C11 2 12 7 12 7Z"
                         stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
                 </svg>
-
                 Your Gifts
             </a>
             <div class="flex border-t border-softpur"></div>
-            {{-- <a href="{{ route('member.user_premium.index') }}" class="side-link"> --}}
-            <a href="#" class="side-link">
+            <a href="{{ route('member.user_premium.index') }}" class="side-link">
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
                     xmlns="http://www.w3.org/2000/svg">
                     <path
@@ -93,8 +91,7 @@
                 </svg>
                 Account Settings
             </a>
-            {{-- <a href="{{ route('member.login.logout') }}" class="side-link"> --}}
-            <a href="#" class="side-link">
+            <a href="{{ route('member.login.logout') }}" class="side-link">
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
                     xmlns="http://www.w3.org/2000/svg">
                     <path
